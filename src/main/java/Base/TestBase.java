@@ -17,7 +17,6 @@ import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 import utility.Utility;
-
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -28,12 +27,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import static org.testng.ITestResult.SUCCESS;
-
 public class TestBase {
 
     public static ThreadLocal<WebDriver> getdriver = new ThreadLocal<>();
-
     public static ExtentReports extent;
     public static ExtentTest test;
     EventFiringWebDriver eDriver;
@@ -82,29 +78,32 @@ public class TestBase {
         test.getModel().setEndTime(getTime(result.getEndMillis()));
         test.getModel().setDescription(result.getMethod().getDescription());
 
-        if (result.getStatus() == ITestResult.FAILURE) {
-            test.getModel().setEndTime(getTime(result.getEndMillis()));
-            test.fail(result.getThrowable());
-            test.assignCategory(className.toUpperCase());
-            test.fail(MarkupHelper.createLabel(result.getName() + " The Test Case Failed", ExtentColor.RED));
-            System.out.println("***************************Failed********************* " + (result.getMethod().getMethodName() + "  " + getTime(result.getEndMillis()) + " ********************Failed******************"));
-        } else if (result.getStatus() == SUCCESS) {
-            test.getModel().setEndTime(getTime(result.getEndMillis()));
-            test.assignCategory(className.toUpperCase());
-            test.pass(MarkupHelper.createLabel(result.getName() + " The Test Case Passed", ExtentColor.GREEN));
-            System.out.println("***************************Passed********************* " + (result.getMethod().getMethodName() + "  " + getTime(result.getEndMillis()) + " ********************Passed******************"));
-        } else if (result.getStatus() == ITestResult.SKIP) {
-            test.getModel().setEndTime(getTime(result.getEndMillis()));
-            test.assignCategory(className.toUpperCase());
-            test.skip(MarkupHelper.createLabel(result.getName() + " The Test Case Skipped", ExtentColor.YELLOW));
-            System.out.println("***************************Skipped********************* " + (result.getMethod().getMethodName() + "  " + getTime(result.getEndMillis()) + " ********************Skipped******************"));
+        switch (result.getStatus()) {
+            case ITestResult.FAILURE -> {
+                test.getModel().setEndTime(getTime(result.getEndMillis()));
+                test.fail(result.getThrowable());
+                test.assignCategory(className.toUpperCase());
+                test.fail(MarkupHelper.createLabel(result.getName() + " The Test Case Failed", ExtentColor.RED));
+                System.out.println("***************Failed********************* " + (result.getMethod().getMethodName() + "  " + getTime(result.getEndMillis()) + " ****************Failed******************"));
+            }
+            case ITestResult.SUCCESS -> {
+                test.getModel().setEndTime(getTime(result.getEndMillis()));
+                test.assignCategory(className.toUpperCase());
+                test.pass(MarkupHelper.createLabel(result.getName() + " The Test Case Passed", ExtentColor.GREEN));
+                System.out.println("**************Passed********************* " + (result.getMethod().getMethodName() + "  " + getTime(result.getEndMillis()) + " ****************Passed******************"));
+            }
+            case ITestResult.SKIP -> {
+                test.getModel().setEndTime(getTime(result.getEndMillis()));
+                test.assignCategory(className.toUpperCase());
+                test.skip(MarkupHelper.createLabel(result.getName() + " The Test Case Skipped", ExtentColor.YELLOW));
+                System.out.println("*************Skipped********************* " + (result.getMethod().getMethodName() + "  " + getTime(result.getEndMillis()) + " ****************Skipped******************"));
+            }
         }
-
         extent.flush();
     }
 
     @BeforeTest(alwaysRun = true)
-    public void setUp() throws IOException, InterruptedException {
+    public void setUp() throws IOException {
         switch (Utility.fetchProperty("BrowserName").toString()) {
             case "Chrome" -> {
                 WebDriverManager.chromedriver().setup();

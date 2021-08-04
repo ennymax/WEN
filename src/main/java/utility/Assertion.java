@@ -7,9 +7,11 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
 import java.io.IOException;
 import java.time.Duration;
 import java.util.function.Function;
+
 import static org.testng.AssertJUnit.assertEquals;
 import static utility.ExcelUtil.DoFluentWait;
 
@@ -39,7 +41,7 @@ public class Assertion extends TestBase {
         }
     }
 
-    public void DoCheckAlert(int timeout) {
+    public static void DoCheckAlert(int timeout) {
         try {
             Wait<WebDriver> wait = new FluentWait<WebDriver>(getdriver.get())
                     .withTimeout(Duration.ofSeconds(timeout))
@@ -54,7 +56,7 @@ public class Assertion extends TestBase {
     }
 
 
-    public static void DoAssertContain(String locator, String Containstext, String Passmassage, String Failedmessage, int Retry, int timeOut) throws IOException{
+    public static void DoAssertContain(String locator, String Containstext, int Retry, int timeOut) throws IOException {
         Wait<WebDriver> wait = new FluentWait<WebDriver>(getdriver.get())
                 .withTimeout(Duration.ofSeconds(timeOut))
                 .pollingEvery(Duration.ofSeconds(Retry))
@@ -73,30 +75,28 @@ public class Assertion extends TestBase {
 
         String text11 = element.getText();
         if (element.isEnabled() && text11.contains(Utility.fetchLocator(Containstext))) {
-            test.log(Status.PASS, Utility.fetchLocator(Passmassage));
+            test.log(Status.PASS, "Element was Present in the Dome");
         } else {
-            test.log(Status.FAIL, Utility.fetchLocator(Failedmessage));
+            test.log(Status.FAIL, "Element Not Found in the Dome");
         }
     }
 
-    public static void DoAssertCheckBoxSelected(String locator,String DisplayPassmsg, String DisplayFailmsg, int timeOut) throws IOException {
+    public static void DoAssertCheckBoxSelected(String locator, int timeOut) throws IOException {
         WebDriverWait wait = new WebDriverWait(getdriver.get(), timeOut);
         WebElement check_box1 = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(Utility.fetchLocator(locator))));
-        if(check_box1.isSelected()) {
-            test.log(Status.PASS, Utility.fetchLocator(DisplayPassmsg));
-        } else {
+        if (!check_box1.isSelected()) {
             check_box1.click();
-            test.log(Status.PASS, Utility.fetchLocator(DisplayPassmsg));
         }
+        test.log(Status.PASS, "Check Box is selected");
     }
 
 
-    public static void DoAssertXpathPresent(String locator, String DisplayPassmessage, String DisplayFailmessage, int timeOut) throws IOException, InterruptedException {
+    public static void DoAssertXpathPresent(String locator, int timeOut) throws IOException, InterruptedException {
         WebDriverWait wait = new WebDriverWait(getdriver.get(), timeOut);
         if (wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(Utility.fetchLocator(locator)))).isDisplayed()) {
-            test.log(Status.PASS, Utility.fetchLocator(DisplayPassmessage));
+            test.log(Status.PASS, "Element was Present in the Dome");
         } else {
-            test.log(Status.FAIL, Utility.fetchLocator(DisplayFailmessage));
+            test.log(Status.FAIL, "Element Not Found in the Dome");
         }
     }
 
