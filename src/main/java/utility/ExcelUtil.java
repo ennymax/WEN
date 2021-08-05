@@ -4,7 +4,6 @@ import Base.TestBase;
 import com.aventstack.extentreports.Status;
 import com.github.javafaker.Faker;
 import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.Wait;
@@ -112,6 +111,29 @@ public class ExcelUtil extends TestBase {
         } else {
             System.out.println("Business Name Doesn't Exist");
         }
+    }
+
+    public void selectAllCheckboxes() throws IOException {
+        List<WebElement> checkboxes = getdriver.get().findElements(By.xpath(Utility.fetchLocator("usenamechecker_XPATH")));
+        for (WebElement checkbox : checkboxes) {
+            if (!checkbox.isSelected()) {
+                checkbox.click();
+            }
+        }
+    }
+
+    /**
+     * Verify all available checkboxes are checked. If at least one unchecked,
+     * return false
+     */
+    public boolean AreAllCheckboxesChecked() throws IOException {
+        List<WebElement> checkboxes = getdriver.get().findElements(By.xpath(Utility.fetchLocator("usenamechecker_XPATH")));
+        for (WebElement checkbox : checkboxes) {
+            if (!checkbox.isSelected()) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }
