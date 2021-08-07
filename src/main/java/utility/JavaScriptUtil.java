@@ -53,7 +53,7 @@ public class JavaScriptUtil extends TestBase {
     }
 
     public static void DoSendKeys(String locator, String value, int timeOut) throws IOException, InterruptedException {
-        WebElement element = getdriver.get().findElement(By.xpath(Utility.fetchLocator(locator)));
+        WebElement element = getdriver.get().findElement(By.xpath(utility.Utility.fetchLocator(locator)));
         JavascriptExecutor jse = (JavascriptExecutor) getdriver.get();
         jse.executeScript("arguments[0].value=" + value + ";", DoFluentWait(locator, timeOut));
     }

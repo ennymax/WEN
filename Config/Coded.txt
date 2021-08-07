@@ -1,1 +1,3 @@
 new Faker().name().firstName()
+System.out.println(new Faker().phoneNumber().subscriberNumber(11));;
+System.out.println(new Faker().internet().emailAddress());

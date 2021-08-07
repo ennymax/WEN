@@ -4,6 +4,7 @@ import Base.TestBase;
 import com.aventstack.extentreports.Status;
 import com.github.javafaker.Faker;
 import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.Wait;
@@ -20,19 +21,19 @@ public class ExcelUtil extends TestBase {
         test.log(Status.PASS, locator);
     }
 
-    public static void DoSendKeysEmail(String locator, int timeOut) {
+    public static void DoSendKeysEmail(String locator, int timeOut) throws IOException {
+        DoFluentWait(locator, timeOut).clear();
+        DoFluentWait(locator, timeOut).sendKeys(new Faker().bothify("????##@gmail.com"));
+        test.log(Status.PASS, locator);
+    }
+
+    public static void DoSendKeysRandomNumber(String locator, int timeOut) throws IOException {
         DoFluentWait(locator, timeOut).clear();
         DoFluentWait(locator, timeOut).sendKeys();
         test.log(Status.PASS, locator);
     }
 
-    public static void DoSendKeysRandomNumber(String locator, int timeOut) {
-        DoFluentWait(locator, timeOut).clear();
-        DoFluentWait(locator, timeOut).sendKeys();
-        test.log(Status.PASS, locator);
-    }
-
-    public static void DoClick(String locator, int timeOut) throws IOException {
+    public static void DoClick(String locator, int timeOut) throws IOException, InterruptedException {
         DoFluentWait(locator, timeOut).click();
         test.log(Status.PASS, Utility.fetchLocator(locator));
     }
@@ -48,22 +49,25 @@ public class ExcelUtil extends TestBase {
         }
     }
 
-    public static void DoSelectValuesByVisibleText(String locator, String value, int timeOut) throws IOException {
+    public static void DoSelectValuesByVisibleText(String locator, String value, int timeOut) throws IOException, InterruptedException {
         Select select = new Select(DoFluentWait(locator, timeOut));
+        DoClick(locator,timeOut);
+        Thread.sleep(700);
         select.selectByVisibleText(Utility.fetchLocator(value));
         test.log(Status.PASS, locator);
     }
 
-    public static void DoSelectValuesByIndex(String locator, int index, int timeOut) {
+    public static void DoSelectValuesByIndex(String locator, int index, int timeOut) throws IOException, InterruptedException {
         Select select = new Select(DoFluentWait(locator, timeOut));
+        DoClick(locator,timeOut);
+        Thread.sleep(700);
         select.selectByIndex(index);
-        test.log(Status.PASS, locator);
     }
 
-    public static WebElement DoFluentWait(final String locator, int timeOut) {
+    public static WebElement DoFluentWait(String locator, int timeOut) throws IOException {
         Wait<WebDriver> wait = new FluentWait<WebDriver>(getdriver.get())
                 .withTimeout(Duration.ofSeconds(timeOut))
-                .pollingEvery(Duration.ofSeconds(2))
+                .pollingEvery(Duration.ofSeconds(1))
                 .ignoring(NoSuchElementException.class);
 
         WebElement element = wait.until(new Function<WebDriver, WebElement>() {
@@ -111,29 +115,6 @@ public class ExcelUtil extends TestBase {
         } else {
             System.out.println("Business Name Doesn't Exist");
         }
-    }
-
-    public void selectAllCheckboxes() throws IOException {
-        List<WebElement> checkboxes = getdriver.get().findElements(By.xpath(Utility.fetchLocator("usenamechecker_XPATH")));
-        for (WebElement checkbox : checkboxes) {
-            if (!checkbox.isSelected()) {
-                checkbox.click();
-            }
-        }
-    }
-
-    /**
-     * Verify all available checkboxes are checked. If at least one unchecked,
-     * return false
-     */
-    public boolean AreAllCheckboxesChecked() throws IOException {
-        List<WebElement> checkboxes = getdriver.get().findElements(By.xpath(Utility.fetchLocator("usenamechecker_XPATH")));
-        for (WebElement checkbox : checkboxes) {
-            if (!checkbox.isSelected()) {
-                return false;
-            }
-        }
-        return true;
     }
 
 }

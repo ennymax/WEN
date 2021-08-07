@@ -22,7 +22,7 @@ public class BrokenLink extends TestBase {
         }
     }
 
-    public static void verifyLink(String urlLink) throws Exception {
+    public static void verifyLink(String urlLink) {
         try {
             URL link = new URL(urlLink);
             HttpURLConnection httpConn = (HttpURLConnection) link.openConnection();
@@ -38,8 +38,9 @@ public class BrokenLink extends TestBase {
                     test.log(Status.FAIL, urlLink + " :::: is a Broken link ::::" + httpConn.getResponseCode() + " " + httpConn.getResponseMessage());
                     System.out.println(urlLink + " :::: is a Broken link :::: " + httpConn.getResponseCode() + " " + httpConn.getResponseCode());
                 }
+
                 default -> {
-                    test.log(Status.SKIP, urlLink + ":::: Other link ::::" + httpConn.getResponseCode() + " " + httpConn.getResponseMessage());
+                    test.log(Status.WARNING, urlLink + ":::: Other link ::::" + httpConn.getResponseCode() + " " + httpConn.getResponseMessage());
                     System.out.println(urlLink + " :::: Other link :::: " + httpConn.getResponseCode() + " " + httpConn.getResponseCode());
                 }
             }
