@@ -9,7 +9,6 @@ import org.testng.annotations.Test;
 import static utility.BrokenLink.BrokenLink;
 import static utility.ExcelUtil.DoClick;
 
-@Listeners({ExtentReportListener.class, RetryListener.class})
 public class Demotest extends TestBase {
 
     @Description("login")
