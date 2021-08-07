@@ -1,20 +1,21 @@
 package utility;
 
 import Base.TestBase;
+import Listeners.ExtentReportListener;
 import com.aventstack.extentreports.Status;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
+import org.testng.annotations.Listeners;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.function.Function;
-
 import static org.testng.AssertJUnit.assertEquals;
 import static utility.ExcelUtil.DoFluentWait;
 
+@Listeners(ExtentReportListener.class)
 public class Assertion extends TestBase {
 
     public static void DoCheckUrl(int timeOut, String Url){
@@ -75,38 +76,28 @@ public class Assertion extends TestBase {
 
         String text11 = element.getText();
         if (element.isEnabled() && text11.contains(Utility.fetchLocator(Containstext))) {
-            test.log(Status.PASS, "Element was Present in the Dome");
+            test.get().pass("Element was Present in the Dome");
         } else {
-            test.log(Status.FAIL, "Element Not Found in the Dome");
+            test.get().fail("Element Not Found in the Dome");
         }
     }
-
-    public static void DoAssertCheckBoxSelected(String locator, int timeOut) throws IOException {
-        WebDriverWait wait = new WebDriverWait(getdriver.get(), timeOut);
-        WebElement check_box1 = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(Utility.fetchLocator(locator))));
-        if (!check_box1.isSelected()) {
-            check_box1.click();
-        }
-        test.log(Status.PASS, "Check Box is selected");
-    }
-
 
     public static void DoAssertXpathPresent(String locator, int timeOut) throws IOException, InterruptedException {
         WebDriverWait wait = new WebDriverWait(getdriver.get(), timeOut);
         if (wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(Utility.fetchLocator(locator)))).isDisplayed()) {
-            test.log(Status.PASS, "Element was Present in the Dome");
+            test.get().pass("Element was Present in the Dome");
         } else {
-            test.log(Status.FAIL, "Element Not Found in the Dome");
+            test.get().fail("Element Not Found in the Dome");
         }
     }
 
     public static void DoAssertEqual(String locator, String assertionString, int timeOut) throws IOException {
         try {
             assertEquals(Utility.fetchLocator(assertionString), DoFluentWait(locator, timeOut).getText());
-            test.log(Status.PASS, "Element is Present in the DOM");
+            test.get().pass("Element is Present in the DOM");
         } catch (Throwable e) {
             System.out.println(getdriver.get().findElement(By.xpath(Utility.fetchLocator(locator))).getText());
-            test.log(Status.FAIL, "Element is not Present in the DOM");
+            test.get().fail("Element is not Present in the DOM");
         }
     }
 }

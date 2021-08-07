@@ -1,6 +1,7 @@
 package utility;
 
 import Base.TestBase;
+import Listeners.ExtentReportListener;
 import com.aventstack.extentreports.Status;
 import com.github.javafaker.Faker;
 import org.openqa.selenium.*;
@@ -8,6 +9,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.Wait;
+import org.testng.annotations.Listeners;
+
 import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
@@ -18,24 +21,24 @@ public class ExcelUtil extends TestBase {
     public static void DoSendKey(String locator, String actualText, int timeOut) throws IOException {
         DoFluentWait(locator, timeOut).clear();
         DoFluentWait(locator, timeOut).sendKeys(Utility.fetchLocator(actualText));
-        test.log(Status.PASS, locator);
+        test.get().pass( locator);
     }
 
     public static void DoSendKeysEmail(String locator, int timeOut) throws IOException {
         DoFluentWait(locator, timeOut).clear();
         DoFluentWait(locator, timeOut).sendKeys(new Faker().bothify("????##@gmail.com"));
-        test.log(Status.PASS, locator);
+        test.get().pass( locator);
     }
 
     public static void DoSendKeysRandomNumber(String locator, int timeOut) throws IOException {
         DoFluentWait(locator, timeOut).clear();
         DoFluentWait(locator, timeOut).sendKeys();
-        test.log(Status.PASS, locator);
+        test.get().pass( locator);
     }
 
     public static void DoClick(String locator, int timeOut) throws IOException, InterruptedException {
         DoFluentWait(locator, timeOut).click();
-        test.log(Status.PASS, Utility.fetchLocator(locator));
+        test.get().pass( locator);
     }
 
     public static void DoClickFromList(WebDriver driver, String locator, String linkText) throws IOException {
@@ -54,7 +57,7 @@ public class ExcelUtil extends TestBase {
         DoClick(locator,timeOut);
         Thread.sleep(700);
         select.selectByVisibleText(Utility.fetchLocator(value));
-        test.log(Status.PASS, locator);
+        test.get().pass(locator);
     }
 
     public static void DoSelectValuesByIndex(String locator, int index, int timeOut) throws IOException, InterruptedException {
@@ -101,7 +104,7 @@ public class ExcelUtil extends TestBase {
     public static void DoSendKeyEnter(String locator, String actualText, int timeOut) throws IOException {
         DoFluentWait(locator, timeOut).clear();
         DoFluentWait(locator, timeOut).sendKeys(Utility.fetchLocator(actualText) + Keys.ENTER + Keys.ENTER + Keys.ENTER);
-        test.log(Status.PASS, locator);
+        test.get().pass( locator);
     }
 
     public static void CheckBusinessNameExist() throws IOException {
@@ -116,5 +119,4 @@ public class ExcelUtil extends TestBase {
             System.out.println("Business Name Doesn't Exist");
         }
     }
-
 }

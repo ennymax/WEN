@@ -16,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+
 public class ScreenShot extends TestBase {
 
     public static void ScreenShotWebElementWebEvent(WebElement locator) throws IOException{
@@ -40,7 +41,7 @@ public class ScreenShot extends TestBase {
         BufferedImage logoImage = fullScreen.getSubimage(location.getX(), location.getY(), width, height);
         ImageIO.write(logoImage, "png", screenshot);
         FileUtils.copyFile(screenshot, new File(extentReportImageqm11));
-        test.log(Status.INFO, "Screenshot from : " + extentReportImageqm11, MediaEntityBuilder.createScreenCaptureFromPath(extentReportImageqm11).build());
+        test.get().info("Screenshot from : " + extentReportImageqm11, MediaEntityBuilder.createScreenCaptureFromPath(extentReportImageqm11).build());
     }
 
     public static void ScreenShotWebElement(String locator) throws IOException{
@@ -66,7 +67,7 @@ public class ScreenShot extends TestBase {
         BufferedImage logoImage = fullScreen.getSubimage(location.getX(), location.getY(), width, height);
         ImageIO.write(logoImage, "png", screenshot);
         FileUtils.copyFile(screenshot, new File(extentReportImageqm11));
-        test.log(Status.INFO, "Screenshot from : " + extentReportImageqm11, MediaEntityBuilder.createScreenCaptureFromPath(extentReportImageqm11).build());
+        test.get().info("Screenshot from : " + extentReportImageqm11, MediaEntityBuilder.createScreenCaptureFromPath(extentReportImageqm11).build());
     }
 
     public static void screenShot() throws IOException, InterruptedException {
@@ -85,7 +86,7 @@ public class ScreenShot extends TestBase {
         try {
             File srcam11 = ((TakesScreenshot) getdriver.get()).getScreenshotAs(OutputType.FILE);
             FileUtils.copyFile(srcam11, new File(errflpath));
-            test.log(Status.INFO, "Screenshot from : " + errflpath, MediaEntityBuilder.createScreenCaptureFromPath(errflpath).build());
+            test.get().info("Screenshot from : " + errflpath, MediaEntityBuilder.createScreenCaptureFromPath(errflpath).build());
         } catch (IOException e) {
             System.out.println("Error in the captureAndDisplayScreenShot method: " + e.getMessage());
         }
@@ -130,7 +131,7 @@ public class ScreenShot extends TestBase {
         String extentReportImageqm11 = Dest.getAbsolutePath();
         Screenshot screenshot = new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(getdriver.get());
         ImageIO.write(screenshot.getImage(), "PNG", new File(extentReportImageqm11));
-        test.log(Status.INFO, "Screenshot from : " + extentReportImageqm11, MediaEntityBuilder.createScreenCaptureFromPath(extentReportImageqm11).build());
+        test.get().info ("Screenshot from : " + extentReportImageqm11, MediaEntityBuilder.createScreenCaptureFromPath(extentReportImageqm11).build());
     }
 }
 

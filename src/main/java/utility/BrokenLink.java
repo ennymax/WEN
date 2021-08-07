@@ -1,9 +1,10 @@
 package utility;
 
 import Base.TestBase;
-import com.aventstack.extentreports.Status;
+import Listeners.ExtentReportListener;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.testng.annotations.Listeners;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -31,17 +32,17 @@ public class BrokenLink extends TestBase {
 
             switch (httpConn.getResponseCode()) {
                 case 200 :
-                    test.log(Status.PASS, urlLink + " :::: is a Valid link :::: " + httpConn.getResponseCode() + " " + httpConn.getResponseMessage());
+                    test.get().pass(urlLink + " :::: is a Valid link :::: " + httpConn.getResponseCode() + " " + httpConn.getResponseMessage());
                     System.out.println(urlLink + ":::: is a Valid link ::::" + httpConn.getResponseCode() + " " + httpConn.getResponseMessage());
                     break;
 
                 case 404:
-                    test.log(Status.FAIL, urlLink + " :::: is a Broken link ::::" + httpConn.getResponseCode() + " " + httpConn.getResponseMessage());
+                    test.get().fail(urlLink + " :::: is a Broken link ::::" + httpConn.getResponseCode() + " " + httpConn.getResponseMessage());
                     System.out.println(urlLink + " :::: is a Broken link :::: " + httpConn.getResponseCode() + " " + httpConn.getResponseCode());
                     break;
 
                 default :
-                    test.log(Status.WARNING, urlLink + ":::: Other link ::::" + httpConn.getResponseCode() + " " + httpConn.getResponseMessage());
+                    test.get().info(urlLink + ":::: Other link ::::" + httpConn.getResponseCode() + " " + httpConn.getResponseMessage());
                     System.out.println(urlLink + " :::: Other link :::: " + httpConn.getResponseCode() + " " + httpConn.getResponseCode());
                     break;
             }

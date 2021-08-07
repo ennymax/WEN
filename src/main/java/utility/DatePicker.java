@@ -17,7 +17,7 @@ public class DatePicker extends TestBase {
         select.clear();
         select.sendKeys(Date);
         Thread.sleep(500);
-        test.log(Status.PASS, locator);
+        test.get().pass( locator);
     }
 
     public static void SetDate(String Dater, String locator, String Day) {

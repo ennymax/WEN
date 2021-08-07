@@ -1,11 +1,14 @@
 package utility;
 
 import Base.TestBase;
+import Listeners.ExtentReportListener;
 import com.aventstack.extentreports.Status;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
+import org.testng.annotations.Listeners;
+
 import java.io.IOException;
 import static utility.ActionsClass.DoFluentWait;
 
@@ -38,13 +41,13 @@ public class JavaScriptUtil extends TestBase {
     public static void DoScrollIntoView(String locator, int timeOut) throws IOException, InterruptedException {
         JavascriptExecutor jse = (JavascriptExecutor) getdriver.get();
         jse.executeScript("arguments[0].scrollIntoView();", DoFluentWait(locator, timeOut));
-        test.log(Status.PASS, locator);
+        test.get().pass( locator);
     }
 
     public static void DoClick(String locator, int timeOut) throws IOException, InterruptedException {
         JavascriptExecutor executor = (JavascriptExecutor) getdriver.get();
         executor.executeScript("arguments[0].click();", DoFluentWait(locator, timeOut));
-        test.log(Status.PASS, locator);
+        test.get().pass( locator);
     }
 
     public static void DoZoomPercentage(int Percentage) {

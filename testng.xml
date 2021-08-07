@@ -3,6 +3,8 @@
 <suite name="COM API TEST PRODUCTION">
     <listeners>
         <listener class-name="Listeners.ExtentReportListener"/>
+        <listener class-name="Listeners.RetryListener"/>
+
     </listeners>
 
     <test name="Create Order" verbose="10">

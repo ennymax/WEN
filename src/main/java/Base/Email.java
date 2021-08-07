@@ -274,12 +274,12 @@ public class Email extends TestBase {
             Arrays.sort(files, LastModifiedFileComparator.LASTMODIFIED_REVERSE);
             theNewestFile = files[0];
 
-            test.log(Status.PASS, " Downloaded File ::: " + theNewestFile.getName());
-            test.log(Status.INFO, " File Saved In ::: " + theNewestFile.getPath());
+          //  test.log(Status.PASS, " Downloaded File ::: " + theNewestFile.getName());
+           // test.log(Status.INFO, " File Saved In ::: " + theNewestFile.getPath());
         }
 
         if (files.length==0) {
-            test.log(Status.FAIL, " Download Failed");
+           // test.log(Status.FAIL, " Download Failed");
         }
     }
 }

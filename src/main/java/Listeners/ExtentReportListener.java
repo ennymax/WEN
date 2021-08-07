@@ -15,9 +15,9 @@ import java.nio.file.Paths;
 import java.util.Calendar;
 import java.util.Date;
 
-public class ExtentReportListener  implements ITestListener {
+public class ExtentReportListener implements ITestListener {
 
-    private static ExtentReports extent = init();
+    public static ExtentReports extent = init();
     public static ThreadLocal<ExtentTest> test = new ThreadLocal<>();
 
     private static ExtentReports init() {

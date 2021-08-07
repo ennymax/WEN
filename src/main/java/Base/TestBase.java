@@ -1,7 +1,7 @@
 package Base;
 
+import Listeners.ExtentReportListener;
 import Listeners.WebEventListener;
-import com.aventstack.extentreports.ExtentTest;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -12,16 +12,16 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Listeners;
 import utility.Utility;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
-public class TestBase {
+public class TestBase extends ExtentReportListener{
 
     public static ThreadLocal<WebDriver> getdriver = new ThreadLocal<>();
-    public static ExtentTest test;
     EventFiringWebDriver eDriver;
     WebEventListener eventListener;
 
