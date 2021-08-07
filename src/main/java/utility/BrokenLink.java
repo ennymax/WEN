@@ -30,19 +30,20 @@ public class BrokenLink extends TestBase {
             httpConn.connect();
 
             switch (httpConn.getResponseCode()) {
-                case 200 -> {
+                case 200 :
                     test.log(Status.PASS, urlLink + " :::: is a Valid link :::: " + httpConn.getResponseCode() + " " + httpConn.getResponseMessage());
                     System.out.println(urlLink + ":::: is a Valid link ::::" + httpConn.getResponseCode() + " " + httpConn.getResponseMessage());
-                }
-                case 404 -> {
+                    break;
+
+                case 404:
                     test.log(Status.FAIL, urlLink + " :::: is a Broken link ::::" + httpConn.getResponseCode() + " " + httpConn.getResponseMessage());
                     System.out.println(urlLink + " :::: is a Broken link :::: " + httpConn.getResponseCode() + " " + httpConn.getResponseCode());
-                }
+                    break;
 
-                default -> {
+                default :
                     test.log(Status.WARNING, urlLink + ":::: Other link ::::" + httpConn.getResponseCode() + " " + httpConn.getResponseMessage());
                     System.out.println(urlLink + " :::: Other link :::: " + httpConn.getResponseCode() + " " + httpConn.getResponseCode());
-                }
+                    break;
             }
         } catch (Exception ignored) {
         }
