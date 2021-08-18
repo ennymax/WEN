@@ -1,122 +1,125 @@
 package utility;
 
-import Base.TestBase;
-import Listeners.ExtentReportListener;
-import com.aventstack.extentreports.Status;
-import com.github.javafaker.Faker;
-import org.openqa.selenium.*;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.FluentWait;
-import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.Wait;
-import org.testng.annotations.Listeners;
+import org.apache.poi.ss.usermodel.*;
+import org.testng.annotations.DataProvider;
 
-import java.io.IOException;
-import java.time.Duration;
-import java.util.List;
-import java.util.function.Function;
+import java.awt.Color;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.util.HashMap;
+import java.util.Map;
 
-public class ExcelUtil extends TestBase {
+public class ExcelUtil {
 
-    public static void DoSendKey(String locator, String actualText, int timeOut) throws IOException {
-        DoFluentWait(locator, timeOut).clear();
-        DoFluentWait(locator, timeOut).sendKeys(Utility.fetchLocator(actualText));
-        test.get().pass( locator);
+    public static final String Sheet2 = "Sheet2";
+    public static final String Sheet1 = "Sheet1";
+
+    private static final String TESTDATA = "./Config/testData.xlsx";
+
+    private FileInputStream fis;
+    private FileOutputStream fileOut;
+    private Sheet sh;
+    private Row row;
+    private CellStyle cellstyle;
+    private Color mycolor;
+    private final Map<String, Integer> columns = new HashMap<>();
+
+    @DataProvider(name = "data-set")
+    public static Object[][] DataSet() throws Exception {
+        ExcelUtil excel = new ExcelUtil();
+        excel.setExcelFile("Sheet2");
+        Object[][] obj = excel.to2DArray();
+        return obj;
     }
 
-    public static void DoSendKeysEmail(String locator, int timeOut) throws IOException {
-        DoFluentWait(locator, timeOut).clear();
-        DoFluentWait(locator, timeOut).sendKeys(new Faker().bothify("????##@gmail.com"));
-        test.get().pass( locator);
-    }
 
-    public static void DoSendKeysRandomNumber(String locator, int timeOut) throws IOException {
-        DoFluentWait(locator, timeOut).clear();
-        DoFluentWait(locator, timeOut).sendKeys();
-        test.get().pass( locator);
-    }
+    public static void main(String[] args) throws Exception {
+        ExcelUtil excel = new ExcelUtil();
+        excel.setExcelFile(Sheet2);
 
-    public static void DoClick(String locator, int timeOut) throws IOException, InterruptedException {
-        DoFluentWait(locator, timeOut).click();
-        test.get().pass( locator);
-    }
+        excel.setExcelFile(Sheet1);
+        System.out.println(excel.getCellData("fullname", 1));
+        System.out.println(excel.getCellData("email", 1));
+        System.out.println(excel.getCellData("telephone", 1));
+        System.out.println(excel.getCellData(2,2));
+        System.out.println(excel.getCellData(1,1));
+        System.out.println(excel.getCellData(1,1));
+        System.out.println(excel.getCellData(1,1));
 
-    public static void DoClickFromList(WebDriver driver, String locator, String linkText) throws IOException {
-        List<WebElement> footerList = driver.findElements(By.xpath(Utility.fetchLocator(locator)));
-        for (int i = 0; i < footerList.size(); i++) {
-            String text = footerList.get(i).getText();
-            if (text.equals(linkText)) {
-                footerList.get(i).click();
-                break;
+        excel.getCellData(1,1);
+        Object[][] obj = excel.to2DArray();excel.setExcelFile(Sheet1);
+        for (Object[] objects : obj) {
+            for (Object object : objects) {
+                System.out.println(object);
             }
         }
     }
+    public void setExcelFile(String SheetName){
+        try {
+            File fis = new File(TESTDATA);
+            Workbook wb = WorkbookFactory.create(fis);
+            sh = wb.getSheet(SheetName);
 
-    public static void DoSelectValuesByVisibleText(String locator, String value, int timeOut) throws IOException, InterruptedException {
-        Select select = new Select(DoFluentWait(locator, timeOut));
-        DoClick(locator,timeOut);
-        Thread.sleep(700);
-        select.selectByVisibleText(Utility.fetchLocator(value));
-        test.get().pass(locator);
-    }
+            sh.getRow(0).forEach(cell -> {
+                columns.put(cell.getStringCellValue(), cell.getColumnIndex());
+            });
 
-    public static void DoSelectValuesByIndex(String locator, int index, int timeOut) throws IOException, InterruptedException {
-        Select select = new Select(DoFluentWait(locator, timeOut));
-        DoClick(locator,timeOut);
-        Thread.sleep(700);
-        select.selectByIndex(index);
-    }
-
-    public static WebElement DoFluentWait(String locator, int timeOut) throws IOException {
-        Wait<WebDriver> wait = new FluentWait<WebDriver>(getdriver.get())
-                .withTimeout(Duration.ofSeconds(timeOut))
-                .pollingEvery(Duration.ofSeconds(1))
-                .ignoring(NoSuchElementException.class);
-
-        WebElement element = wait.until(new Function<WebDriver, WebElement>() {
-            public WebElement apply(WebDriver driver) {
-                try {
-                    return getdriver.get().findElement(By.xpath(Utility.fetchLocator(locator)));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-        });
-
-        return element;
-    }
-
-    public static String Password(int minimumLength, int maximumLength, boolean includeUppercase, boolean includeSpecial) {
-        Faker faker = new Faker();
-        if (includeSpecial) {
-            char[] password = faker.lorem().characters(minimumLength, maximumLength, includeUppercase).toCharArray();
-            char[] special = new char[]{'!', '@', '#', '$', '%', '^', '&', '*'};
-            for (int i = 0; i < faker.random().nextInt(minimumLength); i++) {
-                password[faker.random().nextInt(password.length)] = special[faker.random().nextInt(special.length)];
-            }
-            return new String(password);
-        } else {
-            return faker.lorem().characters(minimumLength, maximumLength, includeUppercase);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 
-    public static void DoSendKeyEnter(String locator, String actualText, int timeOut) throws IOException {
-        DoFluentWait(locator, timeOut).clear();
-        DoFluentWait(locator, timeOut).sendKeys(Utility.fetchLocator(actualText) + Keys.ENTER + Keys.ENTER + Keys.ENTER);
-        test.get().pass( locator);
+    public String getCellData(int rownum, int colnum) {
+        try {
+            Cell cell = sh.getRow(rownum).getCell(colnum);
+            String CellData = null;
+            switch (cell.getCellType()) {
+                case STRING:
+                    CellData = cell.getStringCellValue();
+                    break;
+                case NUMERIC:
+                    if (DateUtil.isCellDateFormatted(cell)) {
+                        CellData = String.valueOf(cell.getDateCellValue());
+                    } else {
+                        CellData = String.valueOf((long) cell.getNumericCellValue());
+                    }
+                    break;
+                case BOOLEAN:
+                    CellData = Boolean.toString(cell.getBooleanCellValue());
+                    break;
+                case BLANK:
+                    CellData = "";
+                    break;
+            }
+            return CellData;
+        } catch (Exception e) {
+            return "";
+        }
     }
 
-    public static void CheckBusinessNameExist() throws IOException {
-        if (getdriver.get().findElements(By.xpath(Utility.fetchLocator("usenamechecker_XPATH"))).size() != 0) {
-            Faker faker = new Faker();
-            String BusinessName = faker.name().firstName() + faker.name().lastName();
+    public String getCellData(String columnName, int rownum){
+        return getCellData(rownum, columns.get(columnName));
+    }
 
-            System.out.println("New Business Name : " + BusinessName);
-            //  DoSendkeyFluentWait("Businessname_XPATH", BusinessName, 2, 20);
-            //  DoClickFluentWait("NextButton_XPATH", 2, 20);
-        } else {
-            System.out.println("Business Name Doesn't Exist");
+    public int getNoOfRows(){
+        return sh.getPhysicalNumberOfRows();
+    }
+
+    public int getNoOfColumns(){
+        return sh.getRow(0).getLastCellNum();
+    }
+
+    public Object[][] to2DArray(){
+        int noOfRows = getNoOfRows()-1;
+        int noOfCells = getNoOfColumns();
+        Object[][] obj = new Object[noOfRows][noOfCells];
+
+        for(int i=0; i<noOfRows; i++){ //i = 0 1 2
+            for(int j=0; j<noOfCells; j++){
+                obj[i][j] = getCellData(i+1,j);
+            }
         }
+        return obj;
     }
 }

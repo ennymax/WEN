@@ -1,36 +1,13 @@
 package utility;
 
 import Base.TestBase;
-import Listeners.ExtentReportListener;
-import com.aventstack.extentreports.Status;
-import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
-import org.testng.annotations.Listeners;
+import org.openqa.selenium.support.PageFactory;
 
 import java.io.IOException;
-import static utility.ActionsClass.DoFluentWait;
 
 public class JavaScriptUtil extends TestBase {
-
-    public static boolean DoIsElementPresent(String locator, int timeOut) {
-        JavascriptExecutor jse = (JavascriptExecutor) getdriver.get();
-        try {
-            Object obj = jse.executeScript("return typeof(arguments[0]) != 'undefined' && arguments[0] != null;",
-                    DoFluentWait(locator, timeOut));
-            if (obj.toString().contains("true")) {
-                System.out.println("Element is not Present in the DOM");
-                return true;
-            } else {
-                System.out.println("Element is Present in thd DOME");
-            }
-
-        } catch (NoSuchElementException | IOException | InterruptedException e) {
-            System.out.println("isElementPresentCheckUsingJavaScriptExecutor: FAIL");
-        }
-        return false;
-    }
 
     public static void DOGetPageLoadTime() {
         final JavascriptExecutor js = (JavascriptExecutor) getdriver.get();
@@ -38,16 +15,14 @@ public class JavaScriptUtil extends TestBase {
         System.out.print(loadTime + " seconds");
     }
 
-    public static void DoScrollIntoView(String locator, int timeOut) throws IOException, InterruptedException {
+    public static void DoScrollIntoView(WebElement locator){
         JavascriptExecutor jse = (JavascriptExecutor) getdriver.get();
-        jse.executeScript("arguments[0].scrollIntoView();", DoFluentWait(locator, timeOut));
-        test.get().pass( locator);
+        jse.executeScript("arguments[0].scrollIntoView();", locator);
     }
 
-    public static void DoClick(String locator, int timeOut) throws IOException, InterruptedException {
+    public static void DoClick(WebElement locator) {
         JavascriptExecutor executor = (JavascriptExecutor) getdriver.get();
-        executor.executeScript("arguments[0].click();", DoFluentWait(locator, timeOut));
-        test.get().pass( locator);
+        executor.executeScript("arguments[0].click();", locator);
     }
 
     public static void DoZoomPercentage(int Percentage) {
@@ -55,9 +30,15 @@ public class JavaScriptUtil extends TestBase {
         jse.executeScript("document.body.style.zoom = '" + Percentage + "%" + "';");
     }
 
-    public static void DoSendKeys(String locator, String value, int timeOut) throws IOException, InterruptedException {
-        WebElement element = getdriver.get().findElement(By.xpath(utility.Utility.fetchLocator(locator)));
+    public static void DoSendKeys(String locator, String value) {
         JavascriptExecutor jse = (JavascriptExecutor) getdriver.get();
-        jse.executeScript("arguments[0].value=" + value + ";", DoFluentWait(locator, timeOut));
+        jse.executeScript("arguments[0].value=" + value + ";", locator);
+    }
+
+    public static void DatePickerJE(WebElement locator, String Date) throws IOException, InterruptedException {
+        JavascriptExecutor js = (JavascriptExecutor) getdriver.get();
+        js.executeScript("arguments[0].type = arguments[1]", locator, "text");
+        locator.clear();
+        locator.sendKeys(Date);
     }
 }

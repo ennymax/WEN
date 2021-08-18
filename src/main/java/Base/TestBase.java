@@ -1,6 +1,6 @@
 package Base;
 
-import Listeners.ExtentReportListener;
+import Listeners.ExtentReport;
 import Listeners.WebEventListener;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
@@ -10,23 +10,34 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Listeners;
+import org.testng.annotations.*;
+import pages.DashboardPage;
+import pages.LoginPage;
 import utility.Utility;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
-public class TestBase extends ExtentReportListener{
+public abstract class TestBase extends ExtentReport {
+
+    public LoginPage loginPage;
+    public DashboardPage dashboardPage;
 
     public static ThreadLocal<WebDriver> getdriver = new ThreadLocal<>();
     EventFiringWebDriver eDriver;
     WebEventListener eventListener;
 
+
+    @BeforeClass
+    public void PageObject() {
+       loginPage = new LoginPage();
+       dashboardPage = new DashboardPage();
+    }
+
     @BeforeTest(alwaysRun = true)
-    public void Browser() throws IOException {
+    public void SetUp() throws IOException {
         switch (Utility.fetchProperty("BrowserName").toString()) {
             case "Chrome":
                 WebDriverManager.chromedriver().setup();
@@ -89,6 +100,7 @@ public class TestBase extends ExtentReportListener{
         }
     }
 
+
     public void Builder() throws IOException {
 
         getdriver.get().manage().window().maximize();
@@ -104,7 +116,8 @@ public class TestBase extends ExtentReportListener{
             e.printStackTrace();
         }
 
-        getdriver.get().manage().timeouts().pageLoadTimeout(Integer.parseInt((String) Utility.fetchProperty("implicit.wait")), TimeUnit.SECONDS);
+        getdriver.get().manage().timeouts().pageLoadTimeout(Integer.parseInt((String) Utility.fetchProperty("PageLoad.wait")), TimeUnit.SECONDS);
+        getdriver.get().manage().timeouts().implicitlyWait(Integer.parseInt((String) Utility.fetchProperty("implicit.wait")), TimeUnit.SECONDS);
     }
 
     @AfterTest(alwaysRun = true)

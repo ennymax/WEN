@@ -1,10 +1,9 @@
 package utility;
 
 import Base.TestBase;
-import Listeners.ExtentReportListener;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.testng.annotations.Listeners;
+import org.openqa.selenium.support.PageFactory;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -12,8 +11,8 @@ import java.util.List;
 
 public class BrokenLink extends TestBase {
 
-    public static void BrokenLink() throws Exception {
 
+    public static void BrokenLink() throws Exception {
         Thread.sleep(1000);
         List<WebElement> links = getdriver.get().findElements(By.tagName("a"));
         System.out.println("Total links are " + links.size());
