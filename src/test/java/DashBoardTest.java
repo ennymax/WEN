@@ -12,7 +12,7 @@ public class DashBoardTest extends TestBase {
     @Description("login")
     @Severity(SeverityLevel.NORMAL)
     @Test(priority = 1)
-    public void login(){
+    public void login() throws Exception {
         loginPage.EnterShopName(fetchvalue("shopname")).EnterShopMail(fetchvalue("email"))
                 .EnterPassword(fetchvalue("password")).ClickSignIn();
         Assert.assertTrue(loginPage.CheckLogin());

@@ -48,7 +48,7 @@ public class ActionClassUtil extends TestBase {
         ac.sendKeys(locator, Keys.DELETE).perform();
     }
 
-    public static void DoHoverEffectClick(WebElement locator) throws IOException, InterruptedException {
+    public static void DoHoverEffectClick(WebElement locator){
         Actions actions = new Actions(getdriver.get());
         actions.moveToElement((locator));
         actions.click().build().perform();

@@ -5,6 +5,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import static utility.JavaScriptUtil.CheckElementPresent;
+
 
 public class DashboardPage extends TestBase {
 
@@ -30,22 +32,22 @@ public class DashboardPage extends TestBase {
     }
 
     public boolean ComBoundle() {
-        return combuttom.isEnabled() && combuttom.isDisplayed();
+        return CheckElementPresent(combuttom);
     }
 
     public boolean UcgBoundle() {
-        return ucgbutton.isEnabled() && ucgbutton.isEnabled();
+        return CheckElementPresent(ucgbutton);
     }
 
     public boolean WfmBoundel() {
-       return wfmbuttom.isDisplayed() && wfmbuttom.isEnabled();
+       return CheckElementPresent(wfmbuttom);
     }
 
     public boolean ImsBoundle() {
-        return imsbutton.isEnabled() && imsbutton.isDisplayed();
+        return CheckElementPresent(imsbutton);
     }
 
     public boolean chatwithus(String value) {
-        return chatwithus.isEnabled() && chatwithus.getText().contains(value);
+        return CheckElementPresent(chatwithus) && chatwithus.getText().contains(value);
     }
 }

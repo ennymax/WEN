@@ -2,12 +2,31 @@ package utility;
 
 import Base.TestBase;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 
 import java.io.IOException;
 
 public class JavaScriptUtil extends TestBase {
+
+    public static boolean CheckElementPresent(WebElement element) {
+        JavascriptExecutor jse = (JavascriptExecutor) getdriver.get();
+        try {
+            Object obj = jse.executeScript("return typeof(arguments[0]) != 'undefined' && arguments[0] != null;",
+                    element);
+            if (obj.toString().contains("true")) {
+                System.out.println("WebElement Found: SUCCESS");
+                return true;
+            } else {
+                System.out.println("WebElement Not Found: FAIL");
+            }
+
+        } catch (NoSuchElementException e) {
+            System.out.println("WebElement Not Found: FAIL");
+        }
+        return false;
+    }
 
     public static void DOGetPageLoadTime() {
         final JavascriptExecutor js = (JavascriptExecutor) getdriver.get();

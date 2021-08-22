@@ -1,4 +1,6 @@
 import Base.TestBase;
+import Listeners.ExtentReport;
+import groovy.beans.ListenerList;
 import io.qameta.allure.Description;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
@@ -8,7 +10,6 @@ import utility.ExcelUtil;
 
 public class Demotest extends TestBase {
 
-    @Description("login")
     @Severity(SeverityLevel.NORMAL)
     @Test(priority = 1, dataProvider = "data-set", dataProviderClass = ExcelUtil.class)
     public void login(String shopnamee, String Emaill, String Passwordd){
@@ -16,7 +17,6 @@ public class Demotest extends TestBase {
         Assert.assertTrue(loginPage.CheckLogin());
     }
 
-    @Description("Dashboard")
     @Severity(SeverityLevel.NORMAL)
     @Test(priority = 2)
     public void DashBoard(){

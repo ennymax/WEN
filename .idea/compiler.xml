@@ -8,10 +8,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="Test_Framework" />
+        <module name="CocodLyte_Test_Framework" />
+        <module name="Wfm_Test_Framework" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="CocodLyte_Test_Framework" target="1.8" />
+      <module name="DataDrivenFramework" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

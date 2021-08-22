@@ -13,12 +13,12 @@ import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.testng.annotations.*;
 import pages.DashboardPage;
 import pages.LoginPage;
-import utility.Utility;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
+
+import static utility.Utility.fetchvalue;
 
 public abstract class TestBase extends ExtentReport {
 
@@ -32,39 +32,37 @@ public abstract class TestBase extends ExtentReport {
 
     @BeforeClass
     public void PageObject() {
-       loginPage = new LoginPage();
-       dashboardPage = new DashboardPage();
+        loginPage = new LoginPage();
+        dashboardPage = new DashboardPage();
     }
 
     @BeforeTest(alwaysRun = true)
-    public void SetUp() throws IOException {
-        switch (Utility.fetchProperty("BrowserName").toString()) {
+    public void SetUp() {
+        switch (fetchvalue("BrowserName")) {
             case "Chrome":
                 WebDriverManager.chromedriver().setup();
                 getdriver.set(new ChromeDriver());
-                Builder();
                 break;
 
             case "Firefox":
                 WebDriverManager.firefoxdriver().setup();
                 getdriver.set(new FirefoxDriver());
-                Builder();
                 break;
 
             case "ChromeHeadless":
-                ChromeOptions options = new ChromeOptions();
-                options.addArguments("--headless");
-                options.addArguments("--incognito");
-                getdriver.set(new ChromeDriver(options));
-                Builder();
+                WebDriverManager.chromedriver().setup();
+                ChromeOptions chromeOptions = new ChromeOptions();
+                chromeOptions.addArguments("--no-sandbox");
+                chromeOptions.addArguments("--headless");
+                getdriver.set(new ChromeDriver(chromeOptions));
                 break;
 
             case "FirefoxHeadless":
+                WebDriverManager.firefoxdriver().setup();
                 FirefoxOptions option = new FirefoxOptions();
                 option.addArguments("--headless");
                 option.addArguments("--incognito");
                 getdriver.set(new FirefoxDriver(option));
-                Builder();
                 break;
 
             case "RemoteFirefox":
@@ -72,14 +70,15 @@ public abstract class TestBase extends ExtentReport {
                 caps.setCapability("browserName", "firefox");
                 caps.setCapability("enableVNC", true);
                 caps.setCapability("console", true);
+                caps.setCapability("visual",true);
+                caps.setCapability("version","latest");
+
                 try {
-                    getdriver.set(new RemoteWebDriver(new URL(Utility.fetchProperty("RemoteURL").toString()), caps));
+                    getdriver.set(new RemoteWebDriver(new URL(fetchvalue("RemoteURL").toString()), caps));
 
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
-
-                Builder();
                 break;
 
             case "RemoteChrome":
@@ -87,21 +86,17 @@ public abstract class TestBase extends ExtentReport {
                 cap.setCapability("browserName", "chrome");
                 cap.setCapability("enableVNC", true);
                 cap.setCapability("console", true);
+                cap.setCapability("visual",true);
+                cap.setCapability("version","latest");
 
                 try {
-                    getdriver.set(new RemoteWebDriver(new URL(Utility.fetchProperty("RemoteURL").toString()), cap));
+                    getdriver.set(new RemoteWebDriver(new URL(fetchvalue("RemoteURL")), cap));
 
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
-
-                Builder();
                 break;
         }
-    }
-
-
-    public void Builder() throws IOException {
 
         getdriver.get().manage().window().maximize();
 
@@ -110,15 +105,13 @@ public abstract class TestBase extends ExtentReport {
         eDriver.register(eventListener);
         getdriver.set(eDriver);
 
-        try {
-            getdriver.get().get(Utility.fetchProperty("UrlPROD").toString());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+        getdriver.get().get(fetchvalue("UrlPROD"));
 
-        getdriver.get().manage().timeouts().pageLoadTimeout(Integer.parseInt((String) Utility.fetchProperty("PageLoad.wait")), TimeUnit.SECONDS);
-        getdriver.get().manage().timeouts().implicitlyWait(Integer.parseInt((String) Utility.fetchProperty("implicit.wait")), TimeUnit.SECONDS);
+        getdriver.get().manage().timeouts().pageLoadTimeout(Integer.parseInt((String) fetchvalue("PageLoad.wait")), TimeUnit.SECONDS);
+        getdriver.get().manage().timeouts().implicitlyWait(Integer.parseInt((String) fetchvalue("implicit.wait")), TimeUnit.SECONDS);
+
     }
+
 
     @AfterTest(alwaysRun = true)
     public void Quit() {

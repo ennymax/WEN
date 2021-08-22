@@ -24,21 +24,4 @@ public class Utility extends TestBase {
 
         return Utility.properties.getProperty(value);
     }
-
-
-    public static Object fetchProperty(String key) throws IOException {
-
-        FileInputStream file = new FileInputStream("./Config/config.properties");
-        Properties property = new Properties();
-        property.load(file);
-        return property.get(key);
-    }
-
-    public static String fetchLocator(String key) throws IOException {
-
-        FileInputStream file = new FileInputStream("./Config/Locators.properties");
-        Properties property = new Properties();
-        property.load(file);
-        return property.get(key).toString();
-    }
 }

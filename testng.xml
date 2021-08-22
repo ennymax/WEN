@@ -6,19 +6,7 @@
         <listener class-name="Listeners.RetryListener"/>
     </listeners>
 
-    <test name="Create Order" verbose="10">
-        <classes>
-            <class name="Demotest"/>
-        </classes>
-    </test>
-
-    <test name="Create Ordero" verbose="10">
-        <classes>
-            <class name="Demotest"/>
-        </classes>
-    </test>
-
-    <test name="Create Orderii" verbose="10">
+    <test name="Dash Board Test 1" verbose="10">
         <classes>
             <class name="Demotest"/>
         </classes>

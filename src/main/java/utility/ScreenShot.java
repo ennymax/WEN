@@ -57,7 +57,7 @@ public class ScreenShot extends TestBase {
         }
         File Dest = new File("src/../Screenshot/" + "Screenshot" + System.currentTimeMillis() + ".png");
         String extentReportImageqm11 = Dest.getAbsolutePath();
-        WebElement logo = getdriver.get().findElement(By.xpath(Utility.fetchLocator(locator)));
+        WebElement logo = getdriver.get().findElement(By.xpath((locator)));
         File screenshot = ((TakesScreenshot) getdriver.get()).getScreenshotAs(OutputType.FILE);
         BufferedImage fullScreen = ImageIO.read(screenshot);
         Point location = logo.getLocation();
@@ -133,6 +133,30 @@ public class ScreenShot extends TestBase {
         ImageIO.write(screenshot.getImage(), "PNG", new File(extentReportImageqm11));
         test.get().info ("Screenshot from : " + extentReportImageqm11, MediaEntityBuilder.createScreenCaptureFromPath(extentReportImageqm11).build());
     }
+
+    public static String getScreenshot() {
+        Path path1 = Paths.get("./Screenshot/");
+        // if directory exists?
+        if (!Files.exists(path1)) {
+            try {
+                Files.createDirectories(path1);
+            } catch (IOException e) {
+                // fail to create directory
+                e.printStackTrace();
+            }
+        }
+
+        File src = ((TakesScreenshot)getdriver.get()).getScreenshotAs(OutputType.FILE);
+        String path = System.getProperty("user.dir") + "/Screenshot/" +"Screenshot"+ System.currentTimeMillis() + ".png";
+        File destination = new File(path);
+        try {
+            FileUtils.copyFile(src, destination);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return path;
+    }
+
 }
 
 

@@ -3,6 +3,7 @@ package utility;
 import Base.TestBase;
 import com.github.javafaker.Faker;
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -12,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class ElementUtil extends TestBase {
 
@@ -35,7 +35,7 @@ public class ElementUtil extends TestBase {
             wait.until((Function<WebDriver, Object>) dr -> isAlertPresent());
             drv.switchTo().alert().accept();
             System.out.println("Alert was Present");
-            TimeUnit.SECONDS.sleep(2);
+            TimeUnit.SECONDS.sleep(3);
 
         } catch (Exception e) {
             System.out.println("Alert was Absent");
@@ -49,7 +49,7 @@ public class ElementUtil extends TestBase {
             wait.until((Function<WebDriver, Object>) dr -> isAlertPresent());
             drv.switchTo().alert().dismiss();
             System.out.println("Alert was Present");
-            TimeUnit.SECONDS.sleep(2);
+            TimeUnit.SECONDS.sleep(3);
         } catch (Exception e) {
             System.out.println("Alert was Absent");
         }
@@ -81,12 +81,12 @@ public class ElementUtil extends TestBase {
         }
     }
 
-    public static void DoSendKeyEnter(WebElement locator, String actualText) throws IOException {
+    public static void DoSendKeyEnter(WebElement locator, String actualText){
         locator.sendKeys(actualText + Keys.ENTER);
     }
 
     public static void CheckBusinessNameExist() throws IOException {
-        if (getdriver.get().findElements(By.xpath(Utility.fetchLocator("usenamechecker_XPATH"))).size() != 0) {
+        if (getdriver.get().findElements(By.xpath(("usenamechecker_XPATH"))).size() != 0) {
             Faker faker = new Faker();
             String BusinessName = faker.name().firstName() + faker.name().lastName();
 
@@ -96,10 +96,6 @@ public class ElementUtil extends TestBase {
         } else {
             System.out.println("Business Name Doesn't Exist");
         }
-    }
-
-    public static String GetText(WebElement locator) {
-        return locator.getText();
     }
 
     public static String GetPageTittle(){

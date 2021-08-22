@@ -2,6 +2,7 @@ package Listeners;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.MediaEntityBuilder;
 import com.aventstack.extentreports.markuputils.ExtentColor;
 import com.aventstack.extentreports.markuputils.MarkupHelper;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
@@ -14,6 +15,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Calendar;
 import java.util.Date;
+
+import static utility.ScreenShot.getScreenshot;
 
 public class ExtentReport implements ITestListener {
 
@@ -73,23 +76,23 @@ public class ExtentReport implements ITestListener {
         test.get().getModel().setEndTime(getTime(result.getEndMillis()));
         test.get().assignCategory(result.getMethod().getMethodName().toUpperCase());
         test.get().pass(MarkupHelper.createLabel(result.getName() + " The Test Case Passed", ExtentColor.GREEN));
-        System.out.println("***************************Passed********************* " + (result.getMethod().getMethodName() + "  " + getTime(result.getEndMillis()) + " ********************Passed******************"));
+        System.out.println("********Passed************* " + (result.getMethod().getMethodName() + "  " + getTime(result.getEndMillis()) + " ****************"));
     }
 
     public synchronized void onTestFailure(ITestResult result) {
         test.get().getModel().setEndTime(getTime(result.getEndMillis()));
-        test.get().fail(result.getThrowable());
+        test.get().fail(result.getThrowable(), MediaEntityBuilder.createScreenCaptureFromPath(getScreenshot()).build());
         test.get().assignCategory(result.getMethod().getMethodName().toUpperCase());
         test.get().fail(MarkupHelper.createLabel(result.getName() + " The Test Case Failed", ExtentColor.RED));
-        System.out.println("***************************Failed********************* " + (result.getMethod().getMethodName() + "  " + getTime(result.getEndMillis()) + " ********************Failed******************"));
+        System.out.println("********Failed******** " + (result.getMethod().getMethodName() + "  " + getTime(result.getEndMillis()) + " ********************"));
     }
 
     public synchronized void onTestSkipped(ITestResult result) {
         test.get().getModel().setEndTime(getTime(result.getEndMillis()));
-        test.get().fail(result.getThrowable());
+        test.get().fail(result.getThrowable(), MediaEntityBuilder.createScreenCaptureFromPath(getScreenshot()).build());
         test.get().assignCategory(result.getMethod().getMethodName().toUpperCase());
         test.get().skip(MarkupHelper.createLabel(result.getName() + " The Test Case Skipped", ExtentColor.YELLOW));
-        System.out.println("***************************Skipped********************* " + (result.getMethod().getMethodName() + "  " + getTime(result.getEndMillis()) + " ********************Skipped******************"));
+        System.out.println("**********Skipped********** " + (result.getMethod().getMethodName() + "  " + getTime(result.getEndMillis()) + " ********************"));
     }
 
     public synchronized void onTestFailedButWithinSuccessPercentage(ITestResult result) {

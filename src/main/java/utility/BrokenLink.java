@@ -4,13 +4,13 @@ import Base.TestBase;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
+import org.testng.Assert;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
 public class BrokenLink extends TestBase {
-
 
     public static void BrokenLink() throws Exception {
         Thread.sleep(1000);
@@ -31,17 +31,14 @@ public class BrokenLink extends TestBase {
 
             switch (httpConn.getResponseCode()) {
                 case 200 :
-                    test.get().pass(urlLink + " :::: is a Valid link :::: " + httpConn.getResponseCode() + " " + httpConn.getResponseMessage());
                     System.out.println(urlLink + ":::: is a Valid link ::::" + httpConn.getResponseCode() + " " + httpConn.getResponseMessage());
                     break;
 
                 case 404:
-                    test.get().fail(urlLink + " :::: is a Broken link ::::" + httpConn.getResponseCode() + " " + httpConn.getResponseMessage());
                     System.out.println(urlLink + " :::: is a Broken link :::: " + httpConn.getResponseCode() + " " + httpConn.getResponseCode());
                     break;
 
                 default :
-                    test.get().info(urlLink + ":::: Other link ::::" + httpConn.getResponseCode() + " " + httpConn.getResponseMessage());
                     System.out.println(urlLink + " :::: Other link :::: " + httpConn.getResponseCode() + " " + httpConn.getResponseCode());
                     break;
             }
